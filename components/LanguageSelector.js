@@ -7,16 +7,18 @@ import { cdnBaseUrl, environment, projectToken } from "../i18n";
 function FlagIcon({ countryCode = "" }) {
 
     if (countryCode === "en") {
-        countryCode = "gb";
+        countryCode = "us";
     } else {
-        countryCode = countryCode.split("_")[0];
+        const splitted = countryCode.split("_");
+        if (!splitted[1]) countryCode = splitted[0];
+        else countryCode = splitted[1];
     }
 
-    console.log(countryCode)
+    countryCode = countryCode.toLowerCase();
 
     return (
         <span
-            className={`fi fis text-lg rounded-full border-none shadow-md bg-white inline-block mr-2 fi-${countryCode}`}
+            className={`fi fis text-lg rounded-full border-none shadow-md bg-white inline-block fi-${countryCode}`}
         />
     );
 }
@@ -26,7 +28,7 @@ const LANGUAGE_SELECTOR_ID = 'language-selector';
 export const LanguageSelector = () => {
     const { i18n } = useTranslation();
     const [languages, setLanguages] = useState([]);
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const selectedLanguage = languages.find(language => language.key === i18n.language);
 
     const handleLanguageChange = async (language) => {
@@ -62,19 +64,19 @@ export const LanguageSelector = () => {
 
     return (
         <>
-            <div className="flex items-center z-40">
+            <div className="flex items-center -mx-2">
                 <div className="relative inline-block text-left">
                     <div>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             type="button"
-                            className="inline-flex items-center justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="inline-flex items-center justify-center w-full rounded-md px-4 py-2 -my-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             id={LANGUAGE_SELECTOR_ID}
                             aria-haspopup="true"
                             aria-expanded={isOpen}
                         >
                             <FlagIcon countryCode={selectedLanguage.key} />
-                            {selectedLanguage.name}
+                            <span className="hidden lg:inline ml-2">{selectedLanguage.name}</span>
                             <svg
                                 className="-mr-1 ml-2 h-5 w-5"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +111,7 @@ export const LanguageSelector = () => {
                                         role="menuitem"
                                     >
                                         <FlagIcon countryCode={language.key} />
-                                        <span className="truncate">{language.name}</span>
+                                        <span className="truncate ml-2">{language.name}</span>
                                     </button>
                                 );
                             })}
