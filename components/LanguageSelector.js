@@ -34,7 +34,7 @@ const LANGUAGE_SELECTOR_ID = 'language-selector';
 export const LanguageSelector = ({ languages }) => {
   const app = useApp();
   const { i18n } = useTranslation();
-  const currentLocale = i18n.language;
+  const currentLocale = i18n.languages[0];
   const router = useRouter();
   const currentPathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -78,7 +78,6 @@ export const LanguageSelector = ({ languages }) => {
 
   const featuredLanguages = app.languages.feature.map((lang) => languages.find((l) => l.full_code === lang));
   const otherLanguages = languages.filter((lang) => !app.languages.feature.includes(lang.full_code));
-  const orderedLanguages = [...featuredLanguages, ...otherLanguages];
 
   const renderLanguageButton = (language, index) => {
     return (
