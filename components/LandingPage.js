@@ -16,6 +16,8 @@ import {
 
 import HeroVideo from '@/components/HeroVideo';
 import { useApp } from '@/context/AppContext';
+import { VIDEOS } from '@/lib/constants';
+import Link from 'next/link';
 
 const products = [
   // { name: 'Find a church', description: 'Get into a church that preaches from the King James Bible and has the right gospel', href: '#', icon: MagnifyingGlassIcon },
@@ -200,24 +202,32 @@ export default function LandingPage() {
               {t('recommended_videos')} <span className="text-sm font-normal text-gray-500">({t('english_only')})</span>
             </h1>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-              {recommendedVideos.map((video) => (
-                <div key={video.title} className="flex flex-col gap-4 rounded-2xl bg-slate-100 overflow-hidden">
-                  <div className="overflow-hidden bg-gray-200">
-                    <Image
-                      src={video.thumbnail || '/images/bw2h_logo_simple.png'}
-                      alt={`${video.title} thumbnail`}
-                      className={`object-cover object-center h-36 lg:h-48 ${!video.thumbnail ? 'opacity-40' : ''}`}
-                      width={700}
-                      height={400}
-                    />
-                  </div>
-                  <div className="flex flex-col p-4 pt-0 flex-1">
-                    <h3 className="text-base text-gray-800 font-semibold">{video.title}</h3>
-                    <h4 className="text-sm text-gray-600">{video.type}</h4>
-                    <p className="pt-2">{video.description}</p>
-                  </div>
-                </div>
-              ))}
+              {recommendedVideos.map((videoID) => {
+                const video = VIDEOS[videoID];
+
+                return (
+                  <Link
+                    key={videoID}
+                    className="flex flex-col gap-4 rounded-2xl bg-slate-100 overflow-hidden"
+                    href={`/videos/${videoID}`}
+                  >
+                    <div className="overflow-hidden bg-gray-200">
+                      <Image
+                        src={video.thumbnail || '/images/bw2h_logo_simple.png'}
+                        alt={`${video.title} thumbnail`}
+                        className={`object-cover object-center h-36 lg:h-48 ${!video.thumbnail ? 'opacity-40' : ''}`}
+                        width={700}
+                        height={400}
+                      />
+                    </div>
+                    <div className="flex flex-col p-6 pt-0 flex-1">
+                      <h3 className="text-base text-gray-800 font-semibold">{video.title}</h3>
+                      <h4 className="text-sm text-gray-600">{video.type}</h4>
+                      <p className="pt-2">{video.description}</p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         ) : null}

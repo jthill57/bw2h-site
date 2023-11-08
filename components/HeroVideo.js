@@ -5,13 +5,15 @@ import ReactPlayer from 'react-player';
 import { useTranslation } from 'react-i18next';
 
 import { useApp } from '@/context/AppContext';
+import { VIDEOS } from '@/lib/constants';
 
-export default function HeroVideo({ onWatched }) {
+export default function HeroVideo({ onWatched, videoId }) {
   const app = useApp();
   const { i18n } = useTranslation();
   const currentLocale = i18n.language;
 
   const video = app.videos[currentLocale];
+  const customVideo = VIDEOS[videoId];
 
   const player = useRef();
   const [hasWindow, setHasWindow] = useState(false);
@@ -23,11 +25,12 @@ export default function HeroVideo({ onWatched }) {
   }, []);
 
   return (
-    <div className="flex w-full bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900">
+    <div className="flex w-full min-h-[calc(50vh-180px)] bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900">
       {hasWindow ? (
         <ReactPlayer
           ref={player}
-          url={video}
+          url={customVideo ? customVideo.src : video}
+          light={customVideo ? customVideo.thumbnail : false}
           controls
           width="100%"
           height="auto"
@@ -36,7 +39,7 @@ export default function HeroVideo({ onWatched }) {
           onProgress={({ playedSeconds }) => {
             const duration = player?.current?.getDuration() || 1;
             if (playedSeconds / duration > 0.9) {
-              onWatched()
+              onWatched && onWatched();
             }
           }}
         />

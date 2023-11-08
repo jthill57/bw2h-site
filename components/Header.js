@@ -3,6 +3,7 @@
 import { LanguageSelector } from './LanguageSelector';
 import Image from 'next/image';
 import { useApp } from '@/context/AppContext';
+import Link from 'next/link';
 
 // const products = [
 //   // { name: 'Find a church', description: 'Get into a church that preaches from the King James Bible and has the right gospel', href: '#', icon: MagnifyingGlassIcon },
@@ -16,7 +17,7 @@ import { useApp } from '@/context/AppContext';
 //   { name: 'Contact us', href: '#', icon: EnvelopeIcon },
 // ]
 
-export default function Header({ languages }) {
+export default function Header({ languages, hideLanguageBar = false }) {
   const app = useApp();
 
   return (
@@ -24,7 +25,7 @@ export default function Header({ languages }) {
       <header className="bg-white w-full sticky top-0 z-10">
         <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <a href="#" className="flex gap-4 items-center">
+            <Link href="/" className="flex gap-4 items-center">
               <span className="sr-only">Bible Way to Heaven</span>
               <Image
                 src={app.logo.url}
@@ -34,11 +35,13 @@ export default function Header({ languages }) {
               />
               <h1 className={`font-semibold text-gray-700 text-lg ${!app.showName ? 'sr-only' : null}`}>{app.name}</h1>
               {/* <span className="font-semibold text-gray-700">Sure Foundation Baptist Church</span> */}
-            </a>
+            </Link>
           </div>
-          <div className="flex lg:flex-1 lg:justify-end">
-            <LanguageSelector languages={languages} />
-          </div>
+          {!hideLanguageBar ? (
+            <div className="flex lg:flex-1 lg:justify-end">
+              <LanguageSelector languages={languages} />
+            </div>
+          ) : null}
         </nav>
       </header>
     </>
