@@ -13,6 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 import HeroVideo from '@/components/HeroVideo';
+import { useApp } from '@/context/AppContext';
 
 const products = [
   // { name: 'Find a church', description: 'Get into a church that preaches from the King James Bible and has the right gospel', href: '#', icon: MagnifyingGlassIcon },
@@ -38,8 +39,11 @@ function ActionButtons() {
 }
 
 export default function LandingPage() {
+  const app = useApp();
   const { t } = useTranslation();
   const [isShowingActionButtons, setIsShowingActionButtons] = useState(false);
+
+  const { recommendedVideos } = app;
 
   return (
     <>
@@ -70,43 +74,33 @@ export default function LandingPage() {
             </Transition>
           </div>
         </div>
-        <div className="w-full max-w-screen-xl mx-auto px-8 flex flex-col gap-6">
-          <h1 className="text-xl font-semibold text-gray-800 flex flex-col lg:flex-row lg:items-baseline lg:gap-2">
-            {t('recommended_videos')} <span className="text-sm font-normal text-gray-500">({t('english_only')})</span>
-          </h1>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-            <div className="flex flex-col lg:flex-row gap-4 rounded-2xl bg-slate-100 p-4">
-              <div className="flex-shrink-0">
-                <Image
-                  src="/images/bw2h_logo_simple.png"
-                  width="128"
-                  height="128"
-                  alt="Logo"
-                />
-              </div>
-              <div className="flex flex-col lg:py-4">
-                <h3 className="text-base text-gray-800 font-semibold">Once Saved Always Saved</h3>
-                <h4 className="text-sm text-gray-600">Sermon</h4>
-                <p className="pt-2">Long description Long description Long descriptionLong description Long description Long description Long descriptionLong description</p>
-              </div>
-            </div>
-            <div className="flex flex-col lg:flex-row gap-4 rounded-2xl bg-slate-100 p-4">
-              <div className="flex-shrink-0">
-                <Image
-                  src="/images/bw2h_logo_simple.png"
-                  width="128"
-                  height="128"
-                  alt="Logo"
-                />
-              </div>
-              <div className="flex flex-col lg:py-4">
-                <h3 className="text-base text-gray-800 font-semibold">The Preserved Bible</h3>
-                <h4 className="text-sm text-gray-600">Documentary</h4>
-                <p className="pt-2">Description</p>
-              </div>
+        {recommendedVideos.length ? (
+          <div className="w-full max-w-screen-xl mx-auto px-8 flex flex-col gap-6">
+            <h1 className="text-xl font-semibold text-gray-800 flex flex-col lg:flex-row lg:items-baseline lg:gap-2">
+              {t('recommended_videos')} <span className="text-sm font-normal text-gray-500">({t('english_only')})</span>
+            </h1>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
+              {recommendedVideos.map((video) => (
+                <div key={video.title} className="flex flex-col gap-4 rounded-2xl bg-slate-100 overflow-hidden">
+                  <div className="overflow-hidden bg-gray-200">
+                    <Image
+                      src={video.thumbnail || '/images/bw2h_logo_simple.png'}
+                      alt={`${video.title} thumbnail`}
+                      className={`object-cover object-center h-36 lg:h-48 ${!video.thumbnail ? 'opacity-40' : ''}`}
+                      width={700}
+                      height={400}
+                    />
+                  </div>
+                  <div className="flex flex-col p-4 pt-0 flex-1">
+                    <h3 className="text-base text-gray-800 font-semibold">{video.title}</h3>
+                    <h4 className="text-sm text-gray-600">{video.type}</h4>
+                    <p className="pt-2">{video.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </>
   );

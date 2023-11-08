@@ -1,3 +1,4 @@
+import { VIDEO_TYPES } from "@/lib/constants";
 import { deepSpread } from "@/lib/helpers";
 
 const defaultConfig = {
@@ -12,6 +13,22 @@ const defaultConfig = {
     disable: [],
     feature: [],
   },
+  recommendedVideos: [
+    {
+      title: 'Once Saved Always Saved',
+      type: VIDEO_TYPES.SERMON,
+      description: 'This sermon goes over the doctrine of eternal security and explains from the Bible how you can never lose your salvation.',
+      thumbnail: '',
+      src: 'https://www.kjv1611only.com/video/02preaching/Sermons_Pastor_Anderson/Once_Saved_Always_Saved.mp4',
+    },
+    {
+      title: 'The Preserved Bible',
+      type: VIDEO_TYPES.DOCUMENTARY,
+      description: 'The Preserved Bible is a documentary explaining the doctrine of preservation and why the Bible has been preserved. Additionally, the film explains through history, scripture, and interviews why the King James Bible is the preserved Bible in English today.',
+      thumbnail: '/images/documentaries/preserved_bible.jpeg',
+      src: 'https://www.kjv1611only.com/video/06docs/docs/The_Preserved_Bible.mp4',
+    },
+  ],
   videos: {
     'en': 'https://www.kjv1611only.com/video/01salvation/Pastor_Anderson.mp4',
     'af-ZA': 'https://www.kjv1611only.com/video/01salvation/Afrikaans.mp4',

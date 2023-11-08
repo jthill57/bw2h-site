@@ -32,6 +32,7 @@ export default function HeroVideo({ onWatched }) {
           width="100%"
           height="auto"
           className="max-w-screen-xl mx-auto"
+          playsinline
           onProgress={({ playedSeconds }) => {
             const duration = player?.current?.getDuration() || 1;
             if (playedSeconds / duration > 0.9) {
