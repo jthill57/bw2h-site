@@ -35,3 +35,4 @@ export default function TranslationsProvider({ children, locale, namespaces }) {
     </I18nextProvider>
   );
 }
+

@@ -1,23 +1,33 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from 'react'
-import ReactPlayer from 'react-player'
+import { useEffect, useRef, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { useTranslation } from 'react-i18next';
+
+import { useApp } from '@/context/AppContext';
 
 export default function HeroVideo({ onWatched }) {
-  const player = useRef()
-  const [hasWindow, setHasWindow] = useState(false)
+  const app = useApp();
+  const { i18n } = useTranslation();
+  const currentLocale = i18n.language;
+
+  const video = app.videos[currentLocale];
+
+  const player = useRef();
+  const [hasWindow, setHasWindow] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setHasWindow(true)
+      setHasWindow(true);
     }
-  }, [])
+  }, []);
 
   return (
     <div className="flex w-full bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900">
       {hasWindow ? (
-        <ReactPlayer url='https://www.kjv1611only.com/video/01salvation/Pastor_Berzins.mp4'
+        <ReactPlayer
           ref={player}
+          url={video}
           controls
           width="100%"
           height="auto"

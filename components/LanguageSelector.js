@@ -7,24 +7,32 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18nConfig from '@/i18nConfig';
+import { useApp } from '@/context/AppContext';
 
-function FlagIcon({ countryCode = "" }) {
+function FlagIcon({ language = {} }) {
+  const { country_code, language_code } = language;
+
+  let flag = country_code?.toLowerCase();
+  if (!flag) {
+    switch (language_code) {
+      case 'en': flag = 'us'; break;
+      case 'eo': flag = 'un'; break;
+      case 'ht': flag = 'ht'; break;
+      default: flag = 'xx'; break;
+    }
+  }
+
   return (
     <span
-      className={`fi fis text-lg rounded-full border-none shadow-md bg-white inline-block fi-${countryCode}`}
+      className={`fi fis text-lg rounded-full border-none shadow-md bg-white inline-block fi-${flag} flex-shrink-0`}
     />
   );
 }
 
 const LANGUAGE_SELECTOR_ID = 'language-selector';
-const languages = [
-  {key: 'en', name: 'English', flag: 'us'},
-  {key: 'de', name: 'German', flag: 'de'},
-  {key: 'es', name: 'Spanish', flag: 'mx'},
-  {key: 'pt', name: 'Portuguese', flag: 'pt'},
-]
 
-export const LanguageSelector = () => {
+export const LanguageSelector = ({ languages }) => {
+  const app = useApp();
   const { i18n } = useTranslation();
   const currentLocale = i18n.language;
   const router = useRouter();
@@ -36,15 +44,15 @@ export const LanguageSelector = () => {
       currentLocale === i18nConfig.defaultLocale &&
       !i18nConfig.prefixDefault
     ) {
-      router.push('/' + language.key + currentPathname);
+      router.push('/' + language + currentPathname);
     } else {
-      if (language.key === i18nConfig.defaultLocale) {
+      if (language === i18nConfig.defaultLocale) {
         router.push(
           currentPathname.replace(currentLocale, '')
         );
       } else {
         router.push(
-          currentPathname.replace(`/${currentLocale}`, `/${language.key}`)
+          currentPathname.replace(`/${currentLocale}`, `/${language}`)
         );
       }
     }
@@ -66,7 +74,28 @@ export const LanguageSelector = () => {
     }
   }, []);
 
-  const selectedLanguage = languages.find((l) => l.key === currentLocale);
+  const selectedLanguage = languages.find((lang) => lang.full_code === currentLocale);
+
+  const featuredLanguages = app.languages.feature.map((lang) => languages.find((l) => l.full_code === lang));
+  const otherLanguages = languages.filter((lang) => !app.languages.feature.includes(lang.full_code));
+  const orderedLanguages = [...featuredLanguages, ...otherLanguages];
+
+  const renderLanguageButton = (language, index) => {
+    return (
+      <button
+        key={language.full_code}
+        onClick={() => handleLanguageChange(language.full_code)}
+        className={`${currentLocale === language.full_code
+            ? "bg-gray-100 text-gray-900"
+            : "text-gray-700"
+          } px-4 py-2 text-sm text-left items-center inline-flex hover:bg-gray-100 ${index % 2 === 0 ? 'rounded-r' : 'rounded-l'}`}
+        role="menuitem"
+      >
+        <FlagIcon language={language} />
+        <span className="truncate ml-2">{language.name}</span>
+      </button>
+    );
+  };
 
   return (
     <>
@@ -81,7 +110,7 @@ export const LanguageSelector = () => {
               aria-haspopup="true"
               aria-expanded={isOpen}
             >
-              <FlagIcon countryCode={selectedLanguage.flag} />
+              <FlagIcon language={selectedLanguage} />
               <span className="hidden lg:inline ml-2">{selectedLanguage.name}</span>
               <svg
                 className="-mr-1 ml-2 h-5 w-5"
@@ -99,28 +128,19 @@ export const LanguageSelector = () => {
             </button>
           </div>
           {isOpen && <div
-            className="origin-top-right absolute right-0 mt-2 w-96 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-40"
+            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-40 flex flex-col divide-y
+              lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="language-selector"
           >
-            <div className="py-1 grid grid-cols-2 gap-2" role="none">
-              {languages.map((language, index) => {
-                return (
-                  <button
-                    key={language.key}
-                    onClick={() => handleLanguageChange(language)}
-                    className={`${currentLocale === language.key
-                        ? "bg-gray-100 text-gray-900"
-                        : "text-gray-700"
-                      } block px-4 py-2 text-sm text-left items-center inline-flex hover:bg-gray-100 ${index % 2 === 0 ? 'rounded-r' : 'rounded-l'}`}
-                    role="menuitem"
-                  >
-                    <FlagIcon countryCode={language.flag} />
-                    <span className="truncate ml-2">{language.name}</span>
-                  </button>
-                );
-              })}
+            {featuredLanguages.length ? (
+              <div className="py-4 grid grid-cols-2 gap-2" role="none">
+                {featuredLanguages.map(renderLanguageButton)}
+              </div>
+            ) : null}
+            <div className="py-4 grid grid-cols-2 gap-2" role="none">
+              {otherLanguages.map(renderLanguageButton)}
             </div>
           </div>}
         </div>
