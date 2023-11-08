@@ -128,7 +128,7 @@ export const LanguageSelector = ({ languages }) => {
             </button>
           </div>
           {isOpen && <div
-            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-40 flex flex-col divide-y
+            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-100 flex flex-col divide-y
               lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]"
             role="menu"
             aria-orientation="vertical"
