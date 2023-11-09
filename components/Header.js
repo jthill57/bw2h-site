@@ -1,24 +1,25 @@
 'use client';
 
-import { LanguageSelector } from './LanguageSelector';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useApp } from '@/context/AppContext';
 import Link from 'next/link';
 
-// const products = [
-//   // { name: 'Find a church', description: 'Get into a church that preaches from the King James Bible and has the right gospel', href: '#', icon: MagnifyingGlassIcon },
-//   { name: 'Come to church', description: 'Come and visit our church where you will be edified by the entire Bible', href: '#', icon: HomeIcon },
-//   { name: 'Be baptized', description: 'The first step in obedience after you get saved to profess your faith and begin your walk with God', href: '#', icon: UserIcon },
-//   { name: 'Get the right Bible', description: 'Find a KJV Bible that you can read, as modern versions pervert and tamper with the Word of God', href: '#', icon: BookOpenIcon },
-//   { name: 'Spread the gospel', description: 'Learn how to go soul winning and reach the lost with the gospel of Jesus Christ', href: '#', icon: MegaphoneIcon },
-// ]
-// const callsToAction = [
-//   { name: 'Share this site', href: '#', icon: ShareIcon },
-//   { name: 'Contact us', href: '#', icon: EnvelopeIcon },
-// ]
+import { LanguageSelector } from './LanguageSelector';
+import { useApp } from '@/context/AppContext';
+import { getLanguages } from '@/lib/helpers';
 
-export default function Header({ languages, hideLanguageBar = false }) {
+export default function Header() {
   const app = useApp();
+  const [languages, setLanguages] = useState([]);
+
+  useEffect(() => {
+    const init = async () => {
+      const availableLanguages = await getLanguages(app.API_KEY);
+      setLanguages(availableLanguages);
+    };
+
+    init();
+  }, []);
 
   return (
     <>
@@ -37,11 +38,9 @@ export default function Header({ languages, hideLanguageBar = false }) {
               {/* <span className="font-semibold text-gray-700">Sure Foundation Baptist Church</span> */}
             </Link>
           </div>
-          {!hideLanguageBar ? (
-            <div className="flex lg:flex-1 lg:justify-end">
-              <LanguageSelector languages={languages} />
-            </div>
-          ) : null}
+          <div className="flex lg:flex-1 lg:justify-end">
+            <LanguageSelector languages={languages} />
+          </div>
         </nav>
       </header>
     </>

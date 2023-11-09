@@ -1,6 +1,10 @@
 import { Inter } from 'next/font/google'
 import '../globals.css'
 
+import { AppProvider } from '@/context/AppContext';
+import TranslationsProvider from '@/components/TranslationsProvider';
+import Header from '@/components/Header';
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -8,7 +12,7 @@ export const metadata = {
   description: 'If you died today, are you 100% sure you would go to heaven?',
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children, params: { locale } }) {
   return (
     <html lang="en">
       <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -18,7 +22,16 @@ export default function RootLayout({ children }) {
       <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
       <meta name="msapplication-TileColor" content="#da532c" />
       <meta name="theme-color" content="#ffffff"></meta>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AppProvider apiKey={process.env.I18NEXUS_API_KEY}>
+          <TranslationsProvider locale={locale} namespaces={['home']}>
+            <main className="flex min-h-screen flex-col items-center">
+              <Header />
+              {children}
+            </main>
+          </TranslationsProvider>
+        </AppProvider>
+      </body>
     </html>
   )
 }

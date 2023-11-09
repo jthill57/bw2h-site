@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18nConfig from '@/i18nConfig';
 import { useApp } from '@/context/AppContext';
+import { LANGUAGE_NAMES } from '@/lib/constants';
 
 function FlagIcon({ language = {} }) {
   const { country_code, language_code } = language;
@@ -39,27 +40,6 @@ export const LanguageSelector = ({ languages }) => {
   const currentPathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLanguageChange = (language) => {
-    if (
-      currentLocale === i18nConfig.defaultLocale &&
-      !i18nConfig.prefixDefault
-    ) {
-      router.push('/' + language + currentPathname);
-    } else {
-      if (language === i18nConfig.defaultLocale) {
-        router.push(
-          currentPathname.replace(currentLocale, '')
-        );
-      } else {
-        router.push(
-          currentPathname.replace(`/${currentLocale}`, `/${language}`)
-        );
-      }
-    }
-
-    router.refresh();
-  };
-
   useEffect(() => {
     const handleWindowClick = (event) => {
       const target = event.target.closest('button');
@@ -74,10 +54,39 @@ export const LanguageSelector = ({ languages }) => {
     }
   }, []);
 
+  if (!languages.length) return null;
+
+  const handleLanguageChange = (newLocale) => {
+    // set cookie for next-i18n-router
+    const days = 30;
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    const expires = '; expires=' + date.toUTCString();
+    document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`;
+
+    // redirect to the new locale path
+    if (
+      currentLocale === i18nConfig.defaultLocale &&
+      !i18nConfig.prefixDefault
+    ) {
+      router.push('/' + newLocale + currentPathname);
+    } else {
+      router.push(
+        currentPathname.replace(`/${currentLocale}`, `/${newLocale}`)
+      );
+    }
+
+    router.refresh();
+  };
+
   const selectedLanguage = languages.find((lang) => lang.full_code === currentLocale);
 
   const featuredLanguages = app.languages.feature.map((lang) => languages.find((l) => l.full_code === lang));
   const otherLanguages = languages.filter((lang) => !app.languages.feature.includes(lang.full_code));
+
+  const fixName = (name) => {
+    return name.replace(/\s*\(.*?\)\s*/g, '');
+  };
 
   const renderLanguageButton = (language, index) => {
     return (
@@ -91,7 +100,10 @@ export const LanguageSelector = ({ languages }) => {
         role="menuitem"
       >
         <FlagIcon language={language} />
-        <span className="truncate ml-2">{language.name}</span>
+        <div className="ml-4 flex flex-col">
+          <span className="truncate">{LANGUAGE_NAMES[language.full_code]}</span>
+          <span className="truncate text-xs text-gray-400">{fixName(language.name)}</span>
+        </div>
       </button>
     );
   };
@@ -110,7 +122,9 @@ export const LanguageSelector = ({ languages }) => {
               aria-expanded={isOpen}
             >
               <FlagIcon language={selectedLanguage} />
-              <span className="hidden lg:inline ml-2">{selectedLanguage.name}</span>
+              <span className="hidden lg:inline ml-2">
+                {LANGUAGE_NAMES[selectedLanguage.full_code]}
+              </span>
               <svg
                 className="-mr-1 ml-2 h-5 w-5"
                 xmlns="http://www.w3.org/2000/svg"
@@ -134,11 +148,11 @@ export const LanguageSelector = ({ languages }) => {
             aria-labelledby="language-selector"
           >
             {featuredLanguages.length ? (
-              <div className="py-4 grid grid-cols-2 gap-2" role="none">
+              <div className="py-4 grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
                 {featuredLanguages.map(renderLanguageButton)}
               </div>
             ) : null}
-            <div className="py-4 grid grid-cols-2 gap-2" role="none">
+            <div className="py-4 grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
               {otherLanguages.map(renderLanguageButton)}
             </div>
           </div>}
