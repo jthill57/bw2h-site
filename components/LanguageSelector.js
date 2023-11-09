@@ -25,7 +25,7 @@ function FlagIcon({ language = {} }) {
 
   return (
     <span
-      className={`text-lg fi fis rounded-full border-none shadow-md bg-white inline-block fi-${flag} flex-shrink-0`}
+      className={`text-[1.125rem] fi fis rounded-full border-none shadow-md bg-white inline-block fi-${flag} flex-shrink-0`}
     />
   );
 }
