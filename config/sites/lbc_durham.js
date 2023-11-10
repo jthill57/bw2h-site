@@ -15,7 +15,7 @@ export function createConfig() {
       feature: ['en', 'es-MX'],
     },
     videos: {
-      'en': 'https://bw2h.b-cdn.net/Gospel%20Presentation.mp4',
+      'en': 'https://stream.mux.com/vDfyo9dSDwYNDQdY7gkSwdtGEgCeKVUecO01BLUFAmmo.m3u8',
     },
   });
 }

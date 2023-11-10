@@ -42,6 +42,9 @@ export default function HeroVideo({ onWatched, videoId }) {
               onWatched && onWatched();
             }
           }}
+          config={{
+            forceHLS: true,
+          }}
         />
       ) : null}
     </div>
