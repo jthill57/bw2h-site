@@ -8,6 +8,7 @@ import { useApp } from '@/context/AppContext';
 import { VIDEOS } from '@/lib/constants';
 
 export default function HeroVideo({ onWatched, videoId }) {
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   const app = useApp();
   const { i18n } = useTranslation();
   const currentLocale = i18n.language;
@@ -43,7 +44,16 @@ export default function HeroVideo({ onWatched, videoId }) {
             }
           }}
           config={{
-            forceHLS: true,
+            file: {
+              forceSafariHLS: !isSafari,
+              forceVideo: true,
+              // in iOS env: hls options is not working 
+              hlsOptions: {
+                xhrSetup: function (xhr, url) {
+                  xhr.setRequestHeader('token', 'admin');
+                },
+              },
+            },
           }}
         />
       ) : null}
