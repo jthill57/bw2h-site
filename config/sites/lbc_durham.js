@@ -16,6 +16,7 @@ export function createConfig() {
     },
     videos: {
       'en': 'https://stream.mux.com/vDfyo9dSDwYNDQdY7gkSwdtGEgCeKVUecO01BLUFAmmo.m3u8',
+      'es-MX': 'https://stream.mux.com/AHkZYgXSzR7sCZboDKHSuW7i00KD00yaasF3Qsk00nf8O00.m3u8',
     },
   });
 }
