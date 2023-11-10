@@ -34,7 +34,7 @@ const LANGUAGE_SELECTOR_ID = 'language-selector';
 
 export const LanguageSelector = ({ languages }) => {
   const app = useApp();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentLocale = i18n.languages[0];
   const router = useRouter();
   const currentPathname = usePathname();
@@ -96,13 +96,13 @@ export const LanguageSelector = ({ languages }) => {
         className={`${currentLocale === language.full_code
             ? "bg-gray-100 text-gray-900"
             : "text-gray-700"
-          } px-4 py-2 text-sm text-left items-center inline-flex hover:bg-gray-100 ${index % 2 === 0 ? 'rounded-r' : 'rounded-l'}`}
+          } px-4 py-2 text-sm text-left items-center inline-flex hover:bg-gray-100 rounded-md`}
         role="menuitem"
       >
         <FlagIcon language={language} />
         <div className="ml-4 flex flex-col">
           <span className="truncate">{LANGUAGE_NAMES[language.full_code]}</span>
-          <span className="truncate text-xs text-gray-400">{fixName(language.name)}</span>
+          <span className="truncate text-xs opacity-50">{fixName(language.name)}</span>
         </div>
       </button>
     );
@@ -141,19 +141,25 @@ export const LanguageSelector = ({ languages }) => {
             </button>
           </div>
           {isOpen && <div
-            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-100 flex flex-col divide-y
+            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-100 flex flex-col -space-y-2
               lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="language-selector"
           >
             {featuredLanguages.length ? (
-              <div className="py-4 grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
-                {featuredLanguages.map(renderLanguageButton)}
+              <div className="p-2">
+                <h3 className="m-4">{t('featured_languages')}</h3>
+                <div className="grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
+                  {featuredLanguages.map(renderLanguageButton)}
+                </div>
               </div>
             ) : null}
-            <div className="py-4 grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
-              {otherLanguages.map(renderLanguageButton)}
+            <div className="p-2">
+              <h3 className="m-4">{t('other_languages')}</h3>
+              <div className="grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
+                {otherLanguages.map(renderLanguageButton)}
+              </div>
             </div>
           </div>}
         </div>

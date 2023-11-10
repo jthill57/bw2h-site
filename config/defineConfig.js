@@ -1,8 +1,8 @@
-import { VIDEO_TYPES } from "@/lib/constants";
 import { deepSpread } from "@/lib/helpers";
 
 const defaultConfig = {
   name: 'Bible Way to Heaven',
+  subName: null,
   showName: true,
   logo: {
     url: '/images/bw2h_logo_simple.png',

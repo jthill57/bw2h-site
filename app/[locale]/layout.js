@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import '../globals.css'
 
+import { appConfig } from '@/config';
 import { AppProvider } from '@/context/AppContext';
 import TranslationsProvider from '@/components/TranslationsProvider';
 import Header from '@/components/Header';
@@ -23,7 +24,7 @@ export default function RootLayout({ children, params: { locale } }) {
       <meta name="msapplication-TileColor" content="#da532c" />
       <meta name="theme-color" content="#ffffff"></meta>
       <body className={inter.className}>
-        <AppProvider apiKey={process.env.I18NEXUS_API_KEY}>
+        <AppProvider config={appConfig} apiKey={process.env.I18NEXUS_API_KEY}>
           <TranslationsProvider locale={locale} namespaces={['home']}>
             <main className="flex min-h-screen flex-col items-center">
               <Header />

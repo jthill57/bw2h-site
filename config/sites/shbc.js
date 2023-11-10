@@ -2,7 +2,8 @@ import { defineConfig } from '../defineConfig';
 
 export function createConfig() {
   return defineConfig({
-    name: 'Strong Hold Baptist Church',
+    name: 'Strong Hold',
+    subName: 'Baptist Church',
     showName: false,
     logo: {
       url: '/images/shbc_logo.png',
