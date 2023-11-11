@@ -17,5 +17,5 @@
 } */
 
 body {
-  background: white;
+  @apply bg-slate-200;
 }

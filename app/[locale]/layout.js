@@ -24,6 +24,7 @@ export default function RootLayout({ children, params: { locale } }) {
       <meta name="msapplication-TileColor" content="#da532c" />
       <meta name="theme-color" content="#ffffff"></meta>
       <meta property="og:image" content="/images/bw2h_logo_simple.png" />
+      <script async defer data-website-id="109194fd-6cc3-4826-8f93-db4aaef2d1e6" src="https://bw2h-stats.vercel.app/umami.js?v=1"></script>
       <body className={inter.className}>
         <AppProvider config={appConfig} apiKey={process.env.I18NEXUS_API_KEY}>
           <TranslationsProvider locale={locale} namespaces={['home']}>

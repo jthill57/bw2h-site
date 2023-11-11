@@ -18,6 +18,8 @@ export default function HeroVideo({ onWatched, videoId }) {
 
   const player = useRef();
   const [hasWindow, setHasWindow] = useState(false);
+  const [logged90, log90] = useState(false);
+  const [loggedPlayTrack, logPlayTrack] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -41,8 +43,19 @@ export default function HeroVideo({ onWatched, videoId }) {
             const duration = player?.current?.getDuration() || 1;
             if (playedSeconds / duration > 0.9) {
               onWatched && onWatched();
+              if (!logged90) {
+                onWatched && window.umami(`Watched 90% in ${currentLocale}`);
+                log90(true);
+              }
             }
           }}
+          onPlay={() => {
+            if (!loggedPlayTrack) {
+              logPlayTrack(true);
+              window.umami(`Started Watching in ${currentLocale}`);
+            }
+          }}
+          onEnded={() => window.umami(`Finished Watching in ${currentLocale}`)}
           config={{
             file: {
               forceSafariHLS: !isSafari,

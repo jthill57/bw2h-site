@@ -5,6 +5,11 @@ export function createConfig() {
     name: 'Strong Hold',
     subName: 'Baptist Church',
     showName: false,
+    enableContactFormWhitelist: true,
+    whitelistedContactLanguages: [
+      'en',
+      'es-MX',
+    ],
     logo: {
       url: '/images/shbc_logo.png',
       height: 42,

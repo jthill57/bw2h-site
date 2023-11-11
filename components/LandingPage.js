@@ -3,7 +3,11 @@
 import { useState, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
+import QRCode from 'react-qr-code';
+import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 
+import { sendEmail } from '@/lib/send-email';
 import { Transition, Dialog } from '@headlessui/react';
 import {
   UserIcon,
@@ -16,8 +20,7 @@ import {
 
 import HeroVideo from '@/components/HeroVideo';
 import { useApp } from '@/context/AppContext';
-import { VIDEOS } from '@/lib/constants';
-import Link from 'next/link';
+import { LANGUAGE_NAMES, VIDEOS } from '@/lib/constants';
 
 const products = [
   // { name: 'Find a church', description: 'Get into a church that preaches from the King James Bible and has the right gospel', href: '#', icon: MagnifyingGlassIcon },
@@ -34,14 +37,14 @@ function ActionButtons({ handleAction }) {
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:justify-end">
       <button
         type="button"
-        class="whitespace-nowrap text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-lg w-full lg:w-auto px-8 py-4 text-center"
+        className="whitespace-nowrap text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-base w-full lg:w-auto px-8 py-4 text-center"
         onClick={() => handleAction(true)}
       >
         {t('action_buttons.yes')}
       </button>
       <button
         type="button"
-        class="whitespace-nowrap text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-lg w-full lg:w-auto px-8 py-4 text-center"
+        className="whitespace-nowrap text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-base w-full lg:w-auto px-8 py-4 text-center"
         onClick={() => handleAction(false)}
       >
         {t('action_buttons.no')}
@@ -52,6 +55,24 @@ function ActionButtons({ handleAction }) {
 
 function ContactModal({ isOpen, closeModal, gotSaved }) {
   const { t } = useTranslation();
+  const app = useApp();
+  const [hasSent, setHasSent] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const { register, handleSubmit } = useForm();
+
+  function onSubmit(data) {
+    setHasSent(true);
+    sendEmail({ gotSaved, ...data },
+      () => {
+        closeModal();
+        setHasError(false);
+      },
+      () => {
+        setHasSent(false);
+        setHasError(true);
+      });
+  }
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -72,7 +93,7 @@ function ContactModal({ isOpen, closeModal, gotSaved }) {
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
-              enter="ease-out duration-300"
+              enter="ea se-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
               leave="ease-in duration-200"
@@ -90,57 +111,80 @@ function ContactModal({ isOpen, closeModal, gotSaved }) {
                   </button>
                 </Dialog.Title>
                 {gotSaved ? (
-                  <p className="mt-6 text-sm">
-                    {t('action_modal.saved_text_start')}
-                    <ol className="my-4 space-y-2">
-                      <li>
-                        <span className="flex items-center gap-1">
-                          <a href="#" className="text-sky-700 ">{t('action_modal.find_church')}</a>
-                          <ArrowTopRightOnSquareIcon className="h-4" />
-                        </span>
-                      </li>
-                      <li>
-                        <span className="flex items-center gap-1">
-                          <a href="#" className="text-sky-700 ">{t('action_modal.get_baptized')}</a>
-                          <ArrowTopRightOnSquareIcon className="h-4 " />
-                        </span>
-                      </li>
-                      <li>
-                        <span className="flex items-center gap-1">
-                          <a href="#" className="text-sky-700 ">{t('action_modal.get_bible')}</a>
-                          <ArrowTopRightOnSquareIcon className="h-4" />
-                        </span>
-                      </li>
-                      <li>
-                        <span className="flex items-center gap-1">
-                          <a href="#" className="text-sky-700 ">{t('action_modal.spread_gospel')}</a>
-                          <ArrowTopRightOnSquareIcon className="h-4" />
-                        </span>
-                      </li>
-                    </ol>
-                    {t('action_modal.saved_text_end')}
-                  </p>
+                  <>
+                    <p className="mt-6 text-sm hidden">
+                      {t('action_modal.saved_text_start')}
+                      <ol className="my-4 space-y-2">
+                        <li>
+                          <span className="flex items-center gap-1">
+                            <a href="#" className="text-sky-700 ">{t('action_modal.find_church')}</a>
+                            <ArrowTopRightOnSquareIcon className="h-4" />
+                          </span>
+                        </li>
+                        <li>
+                          <span className="flex items-center gap-1">
+                            <a href="#" className="text-sky-700 ">{t('action_modal.get_baptized')}</a>
+                            <ArrowTopRightOnSquareIcon className="h-4 " />
+                          </span>
+                        </li>
+                        <li>
+                          <span className="flex items-center gap-1">
+                            <a href="#" className="text-sky-700 ">{t('action_modal.get_bible')}</a>
+                            <ArrowTopRightOnSquareIcon className="h-4" />
+                          </span>
+                        </li>
+                        <li>
+                          <span className="flex items-center gap-1">
+                            <a href="#" className="text-sky-700 ">{t('action_modal.spread_gospel')}</a>
+                            <ArrowTopRightOnSquareIcon className="h-4" />
+                          </span>
+                        </li>
+                      </ol>
+                    </p>
+                    <p className="mt-6 text-sm">
+                      {t('action_modal.saved_text_end')}
+                    </p>
+                  </>
                 ) : (
                   <p className="mt-6 text-sm">
                     {t('action_modal.questions_text')}
                   </p>
                 )}
+                {app.enableContactFormWhitelist ? (
+                  <p className="mt-6 text-sm">
+                    {t('action_modal.whitelisted_languages')}
+                    <p className="mt-3 font-semibold text-gray-600 rounded-lg bg-gray-200 py-2 px-4">
+                      {app.whitelistedContactLanguages.map((lang) => LANGUAGE_NAMES[lang]).join(', ')}
+                    </p>
+                  </p>
+                ) : null}
                 <div className="mt-6">
-                  <form action="#" class="space-y-6">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div>
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('action_modal.email')}</label>
-                        <input type="email" id="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" placeholder="name@domain.com" required />
+                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('action_modal.email')}</label>
+                        <input
+                          type="email"
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+                          placeholder="name@domain.com"
+                          {...register('email', { required: true })}
+                        />
                     </div>
-                    <div class="sm:col-span-2">
-                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">{t('action_modal.message')}</label>
-                        <textarea id="message" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder={t('action_modal.message_placeholder')}></textarea>
+                    <div className="sm:col-span-2">
+                        <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">{t('action_modal.message')}</label>
+                        <textarea
+                          rows="6"
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                          placeholder={t('action_modal.message_placeholder')}
+                          {...register('message', { required: true })}
+                        ></textarea>
                     </div>
                     <button
-                      type="button"
-                      className="whitespace-nowrap text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm w-full lg:w-auto px-8 py-4 text-center"
-                      onClick={closeModal}
+                      type="submit"
+                      className="whitespace-nowrap text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm w-full lg:w-auto px-8 py-4 text-center
+                      disabled:from-gray-400 disabled:to-gray-400"
+                      disabled={hasSent}
                     >
-                      {t('action_modal.send_message')}
+                      {hasSent ? t('action_modal.message_sent') : t('action_modal.send_message')}
                     </button>
                   </form>
                 </div>
@@ -155,14 +199,17 @@ function ContactModal({ isOpen, closeModal, gotSaved }) {
 
 export default function LandingPage() {
   const app = useApp();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isShowingActionButtons, setIsShowingActionButtons] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [gotSaved, setGotSaved] = useState(false);
 
+  const currentLocale = i18n.language;
+
   const { recommendedVideos } = app;
 
   function handleAction(gotSaved) {
+    window.umami(`${gotSaved ? 'Clicked "Got saved"' : 'Clicked "Still had questions"' } in ${currentLocale}`);
     setGotSaved(gotSaved);
     setIsModalOpen(true);
   }
@@ -170,14 +217,14 @@ export default function LandingPage() {
   return (
     <>
       <HeroVideo onWatched={() => setIsShowingActionButtons(true)} />
-      <div className="flex flex-col w-full gap-8 py-8">
-        <div className="w-full bg-slate-100 py-8 flex items-center -mt-8">
-          <div className="px-8 max-w-screen-xl flex w-full items-center justify-between flex-col gap-8 lg:flex-row mx-auto">
-            <div className="flex flex-col gap-3">
-              <h2 className="text-lg font-semibold text-gray-800">
+      <div className="flex flex-col w-full gap-6 py-8 flex-1">
+        <div className="w-full bg-slate-100 py-6 flex items-center -mt-8 drop-shadow-sm">
+          <div className="px-8 max-w-screen-xl flex w-full lg:items-center justify-between flex-col gap-6 lg:flex-row mx-auto">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-xl font-semibold text-gray-800">
                 {t('main_question')}
               </h2>
-              <h3 className="text-base text-gray-600">
+              <h3 className="text-base text-gray-700">
                 {t('watch_video')}
               </h3>
             </div>
@@ -196,12 +243,37 @@ export default function LandingPage() {
             </Transition>
           </div>
         </div>
+        <div className="w-full max-w-screen-xl mx-auto px-8 flex flex-col gap-6 items-center flex-1 justify-center lg:hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24">
+            <div className="flex items-center flex-col justify-center gap-4">
+              <h1 className="text-xl font-semibold text-gray-800 flex flex-col lg:flex-row lg:items-baseline lg:gap-2">
+                {t('share_with_others')}
+              </h1>
+              <div className="h-auto w-full mx-auto max-w-[196px] rounded-3xl overflow-hidden p-6 bg-white">
+                <QRCode
+                  size={256}
+                  className="h-auto max-w-full w-full"
+                  value={window.location.protocol + "//" + window.location.host  + window.location.pathname}
+                  viewBox={`0 0 256 256`}
+                />
+              </div>
+            </div>
+            <div className="flex items-center flex-col justify-center gap-4">
+              <Link
+                href="/videos"
+                className="whitespace-nowrap text-white bg-gradient-to-r from-slate-500 to-slate-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-slate-600 dark:focus:ring-slate-800 font-medium rounded-lg text-sm w-auto px-6 py-3 text-center"
+              >
+                {t('more_content')} ({t('english_only')})
+              </Link>
+            </div>
+          </div>
+        </div>
         {recommendedVideos.length ? (
-          <div className="w-full max-w-screen-xl mx-auto px-8 flex flex-col gap-6">
+          <div className="w-full max-w-screen-xl mx-auto px-8 hidden flex-col gap-6 lg:flex">
             <h1 className="text-xl font-semibold text-gray-800 flex flex-col lg:flex-row lg:items-baseline lg:gap-2">
               {t('recommended_videos')} <span className="text-sm font-normal text-gray-500">({t('english_only')})</span>
             </h1>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
               {recommendedVideos.map((videoID) => {
                 const video = VIDEOS[videoID];
 
@@ -211,7 +283,7 @@ export default function LandingPage() {
                     className="flex flex-col gap-4 rounded-2xl bg-slate-100 overflow-hidden"
                     href={`/videos/${videoID}`}
                   >
-                    <div className="overflow-hidden bg-gray-200">
+                    <div className="overflow-hidden bg-white">
                       <Image
                         src={video.thumbnail || '/images/bw2h_logo_simple.png'}
                         alt={`${video.title} thumbnail`}
