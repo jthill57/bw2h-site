@@ -34,7 +34,7 @@ export default function Header() {
               alt="Logo"
             />
             <div className="flex flex-col align-start -space-y-1">
-              <h1 className={`font-semibold text-gray-700 text-lg ${!app.showName ? 'sr-only' : null}`}>{app.name}</h1>
+              <h1 className={`font-semibold text-gray-700 text-lg hidden ${!app.showName ? 'lg:sr-only' : 'lg:inline'}`}>{app.name}</h1>
               {app.subName ? (
                 <h2 className={`font-normal text-gray-600 text-xs ${!app.showName ? 'sr-only' : null}`}>{app.subName}</h2>
               ) : null}

@@ -122,7 +122,7 @@ export const LanguageSelector = ({ languages }) => {
               aria-expanded={isOpen}
             >
               <FlagIcon language={selectedLanguage} />
-              <span className="hidden lg:inline ml-2">
+              <span className="inline ml-2">
                 {LANGUAGE_NAMES[selectedLanguage.full_code]}
               </span>
               <svg
