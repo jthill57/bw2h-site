@@ -44,7 +44,7 @@ export default function HeroVideo({ onWatched, videoId }) {
             if (playedSeconds / duration > 0.9) {
               onWatched && onWatched();
               if (!logged90) {
-                onWatched && window.umami(`Watched 90% in ${currentLocale}`);
+                onWatched && window.umami && window.umami(`Watched 90% in ${currentLocale}`);
                 log90(true);
               }
             }
@@ -52,10 +52,10 @@ export default function HeroVideo({ onWatched, videoId }) {
           onPlay={() => {
             if (!loggedPlayTrack) {
               logPlayTrack(true);
-              window.umami(`Started Watching in ${currentLocale}`);
+              window.umami && window.umami(`Started Watching in ${currentLocale}`);
             }
           }}
-          onEnded={() => window.umami(`Finished Watching in ${currentLocale}`)}
+          onEnded={() => window.umami && window.umami(`Finished Watching in ${currentLocale}`)}
           config={{
             file: {
               forceSafariHLS: !isSafari,

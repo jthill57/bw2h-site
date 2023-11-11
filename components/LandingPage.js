@@ -209,7 +209,7 @@ export default function LandingPage() {
   const { recommendedVideos } = app;
 
   function handleAction(gotSaved) {
-    window.umami(`${gotSaved ? 'Clicked "Got saved"' : 'Clicked "Still had questions"' } in ${currentLocale}`);
+    window.umami && window.umami(`${gotSaved ? 'Clicked "Got saved"' : 'Clicked "Still had questions"' } in ${currentLocale}`);
     setGotSaved(gotSaved);
     setIsModalOpen(true);
   }
