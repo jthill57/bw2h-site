@@ -1,4 +1,3 @@
-
 import { getValidSubdomain } from '@/lib/helpers';
 import { defineConfig } from './defineConfig';
 import { ENABLED_CONFIGS, SITES } from '@/lib/constants';
@@ -10,7 +9,7 @@ const SITE_CONFIGS = {
 }
 
 export function getAppConfig(host) {
-  const subdomain = getValidSubdomain(host);
+  const subdomain = 'sfbc';
   const siteConfig = SITE_CONFIGS[subdomain];
 
   if (ENABLED_CONFIGS.includes(subdomain)) return defineConfig(siteConfig);
