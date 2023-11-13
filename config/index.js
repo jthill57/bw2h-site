@@ -9,10 +9,8 @@ const SITE_CONFIGS = {
   [SITES.LBC_DURHAM]: require('./sites/lbc_durham.js'),
 }
 
-export const appConfig = getConfig();
-
-function getConfig() {
-  const subdomain = getValidSubdomain();
+export function getAppConfig(host) {
+  const subdomain = getValidSubdomain(host);
   const siteConfig = SITE_CONFIGS[subdomain];
 
   if (ENABLED_CONFIGS.includes(subdomain)) return defineConfig(siteConfig);

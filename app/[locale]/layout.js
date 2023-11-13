@@ -1,12 +1,13 @@
+import { headers } from 'next/headers';
 import { Inter } from 'next/font/google'
 import '../globals.css'
 
-import { appConfig } from '@/config';
+import { getAppConfig } from '@/config';
 import { AppProvider } from '@/context/AppContext';
 import TranslationsProvider from '@/components/TranslationsProvider';
 import Header from '@/components/Header';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'Bible Way to Heaven',
@@ -14,6 +15,9 @@ export const metadata = {
 }
 
 export default function RootLayout({ children, params: { locale } }) {
+  const headersList = headers();
+  const host = headersList.get('host') || "";
+
   return (
     <html lang="en">
       <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -26,7 +30,7 @@ export default function RootLayout({ children, params: { locale } }) {
       <meta property="og:image" content="/images/bw2h_logo_simple.png" />
       <script async defer data-website-id="109194fd-6cc3-4826-8f93-db4aaef2d1e6" src="https://bw2h-stats.vercel.app/umami.js?v=1"></script>
       <body className={inter.className}>
-        <AppProvider config={appConfig} apiKey={process.env.I18NEXUS_API_KEY}>
+        <AppProvider config={getAppConfig(host)} apiKey={process.env.I18NEXUS_API_KEY}>
           <TranslationsProvider locale={locale} namespaces={['home']}>
             <main className="flex min-h-screen flex-col items-center">
               <Header />
