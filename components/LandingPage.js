@@ -21,6 +21,7 @@ import {
 import HeroVideo from '@/components/HeroVideo';
 import { useApp } from '@/context/AppContext';
 import { LANGUAGE_NAMES, VIDEOS } from '@/lib/constants';
+import { LanguageSelector } from './LanguageSelector';
 
 const products = [
   // { name: 'Find a church', description: 'Get into a church that preaches from the King James Bible and has the right gospel', href: '#', icon: MagnifyingGlassIcon },
@@ -217,7 +218,7 @@ export default function LandingPage() {
   return (
     <>
       <HeroVideo onWatched={() => setIsShowingActionButtons(true)} />
-      <div className="flex flex-col w-full gap-6 py-8 flex-1">
+      <div className="flex flex-col w-full gap-8 py-8 flex-1">
         <div className="w-full bg-slate-100 py-6 flex items-center -mt-8 drop-shadow-sm">
           <div className="px-8 max-w-screen-xl flex w-full lg:items-center justify-between flex-col gap-6 lg:flex-row mx-auto">
             <div className="flex flex-col gap-2">
@@ -243,13 +244,10 @@ export default function LandingPage() {
             </Transition>
           </div>
         </div>
-        <div className="w-full max-w-screen-xl mx-auto px-8 flex flex-col gap-6 items-center flex-1 justify-center lg:hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24">
-            <div className="flex items-center flex-col justify-center gap-4">
-              <h1 className="text-xl font-semibold text-gray-800 flex flex-col lg:flex-row lg:items-baseline lg:gap-2">
-                {t('share_with_others')}
-              </h1>
-              <div className="h-auto w-full mx-auto max-w-[196px] rounded-3xl overflow-hidden p-6 bg-white">
+        <div className="w-full max-w-screen-xl mx-auto px-8 lg:hidden">
+          <div className="flex justify-between gap-8">
+            <div className="flex items-center flex-col justify-start gap-2 border max-w-[150px]">
+              <div className="h-auto w-full mx-auto rounded-2xl overflow-hidden p-4 bg-white">
                 <QRCode
                   size={256}
                   className="h-auto max-w-full w-full"
@@ -257,13 +255,17 @@ export default function LandingPage() {
                   viewBox={`0 0 256 256`}
                 />
               </div>
+              <span className="text-center text-xs font-semibold text-gray-800">
+                {t('share_with_others')}
+              </span>
             </div>
-            <div className="flex items-center flex-col justify-center gap-4">
+            <div className="flex flex-1 flex-col justify-start gap-4 pt-4 flex-shrink-0">
+              <LanguageSelector />
               <Link
                 href="/videos"
-                className="whitespace-nowrap text-white bg-gradient-to-r from-slate-500 to-slate-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-slate-600 dark:focus:ring-slate-800 font-medium rounded-lg text-sm w-auto px-6 py-3 text-center"
+                className="whitespace-nowrap text-white bg-gradient-to-r from-slate-500 to-slate-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-slate-600 dark:focus:ring-slate-800 font-medium rounded-md text-sm w-auto px-6 py-2 text-center"
               >
-                {t('more_content')} ({t('english_only')})
+                {t('more_content')}
               </Link>
             </div>
           </div>

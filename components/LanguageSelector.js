@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import i18nConfig from '@/i18nConfig';
 import { useApp } from '@/context/AppContext';
 import { LANGUAGE_NAMES } from '@/lib/constants';
+import { getLanguages } from '@/lib/helpers';
 
 function FlagIcon({ language = {} }) {
   const { country_code, language_code } = language;
@@ -32,13 +33,23 @@ function FlagIcon({ language = {} }) {
 
 const LANGUAGE_SELECTOR_ID = 'language-selector';
 
-export const LanguageSelector = ({ languages }) => {
+export const LanguageSelector = ({ hideNameOnMobile }) => {
   const app = useApp();
   const { t, i18n } = useTranslation();
   const currentLocale = i18n.languages[0];
   const router = useRouter();
   const currentPathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [languages, setLanguages] = useState([]);
+
+  useEffect(() => {
+    const init = async () => {
+      const availableLanguages = await getLanguages(app.API_KEY);
+      setLanguages(availableLanguages);
+    };
+
+    init();
+  }, []);
 
   useEffect(() => {
     const handleWindowClick = (event) => {
@@ -110,19 +121,19 @@ export const LanguageSelector = ({ languages }) => {
 
   return (
     <>
-      <div className="flex items-center -mx-2">
-        <div className="relative inline-block text-left">
+      <div className="flex items-center">
+        <div className="relative inline-block text-left flex-1">
           <div>
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="inline-flex items-center justify-center w-full rounded-md px-4 py-2 -my-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center justify-center w-full rounded-md px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               id={LANGUAGE_SELECTOR_ID}
               aria-haspopup="true"
               aria-expanded={isOpen}
             >
               <FlagIcon language={selectedLanguage} />
-              <span className="inline ml-2">
+              <span className={`${hideNameOnMobile ? 'hidden' : ''} md:inline ml-2`}>
                 {LANGUAGE_NAMES[selectedLanguage.full_code]}
               </span>
               <svg
@@ -141,7 +152,7 @@ export const LanguageSelector = ({ languages }) => {
             </button>
           </div>
           {isOpen && <div
-            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-100 flex flex-col -space-y-2
+            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 flex flex-col -space-y-2
               lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]"
             role="menu"
             aria-orientation="vertical"
