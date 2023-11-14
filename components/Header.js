@@ -38,7 +38,7 @@ export default function Header() {
             {({ open }) => (
               <>
                 <Popover.Button className="outline-none p-2 -m-2">
-                  {open ? <XMarkIcon className="h-6 w-6" aria-hidden="true" /> : <Bars3Icon className="h-6 w-6" aria-hidden="true" />}
+                  <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>
                 <Transition>
                   <Transition.Child
