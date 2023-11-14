@@ -40,17 +40,17 @@ export default function Header() {
                 <Popover.Button className="outline-none p-2 -m-2">
                   {open ? <XMarkIcon className="h-6 w-6" aria-hidden="true" /> : <Bars3Icon className="h-6 w-6" aria-hidden="true" />}
                 </Popover.Button>
-                {open && (
-                  <div className="fixed top-20 left-2 right-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 flex flex-col -space-y-2
+                <Popover.Panel className="fixed top-20 left-2 right-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 flex flex-col -space-y-2
                   lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]">
+                  {({ close }) => (
                     <div className="flow-root px-6 py-2 divide-y">
                       <h1 className="mt-4 mb-4 font-semibold text-gray-800 text-base">
                         {t('more_content')} <span className="text-xs font-normal text-gray-600 ml-1">({t('english_only')})</span>
                       </h1>
                       <div className="space-y-2 py-2">
-                      <Link
+                        <Link
                           href="/videos"
-                          onClick={() => setMobileMenuOpen(false)}
+                          onClick={() => close()}
                           className="-mx-6 flex items-center gap-3 rounded-lg px-6 py-2 text-base font-semibold leading-7 text-sky-700 hover:bg-gray-50 outline-none"
                         >
                           <FilmIcon className="h-6" />
@@ -58,7 +58,7 @@ export default function Header() {
                         </Link>
                         <Link
                           href="/hymns"
-                          onClick={() => setMobileMenuOpen(false)}
+                          onClick={() => close()}
                           className="-mx-6 flex items-center gap-3 rounded-lg px-6 py-2 text-base font-semibold leading-7 text-sky-700 hover:bg-gray-50 outline-none hidden"
                         >
                           <MusicalNoteIcon className="h-6" />
@@ -66,8 +66,8 @@ export default function Header() {
                         </Link>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </Popover.Panel>
               </>
             )}
           </Popover>
