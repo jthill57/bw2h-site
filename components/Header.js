@@ -1,19 +1,19 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Dialog, Disclosure } from '@headlessui/react'
-
-import { LanguageSelector } from './LanguageSelector';
-import { useApp } from '@/context/AppContext';
+import { Dialog } from '@headlessui/react'
 import { useTranslation } from 'react-i18next';
 import { Bars3Icon, FilmIcon, MusicalNoteIcon, XMarkIcon } from '@heroicons/react/24/outline';
+
+import { useToggle } from '@/lib/hooks';
+import { useApp } from '@/context/AppContext';
+import { LanguageSelector } from './LanguageSelector';
 
 export default function Header() {
   const app = useApp();
   const { t } = useTranslation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, toggleMenuOpen] = useToggle(false);
 
   return (
     <header className="bg-white w-full sticky top-0 z-10">
@@ -39,7 +39,7 @@ export default function Header() {
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={toggleMenuOpen}
           >
             <span className="sr-only">Open main menu</span>
             {mobileMenuOpen ? <XMarkIcon className="x-6 w-6" aria-hidden="true" /> : <Bars3Icon className="h-6 w-6" aria-hidden="true" />}
@@ -49,7 +49,7 @@ export default function Header() {
           <LanguageSelector hideNameOnMobile />
         </div>
       </nav>
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
+      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={toggleMenuOpen}>
         <Dialog.Panel className="fixed top-20 left-2 right-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 flex flex-col -space-y-2
               lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]">
           <div className="flow-root px-6 py-2 divide-y">
