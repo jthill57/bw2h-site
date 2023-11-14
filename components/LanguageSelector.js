@@ -10,6 +10,7 @@ import i18nConfig from '@/i18nConfig';
 import { useApp } from '@/context/AppContext';
 import { LANGUAGE_NAMES } from '@/lib/constants';
 import { getLanguages } from '@/lib/helpers';
+import { Transition } from '@headlessui/react';
 
 function FlagIcon({ language = {} }) {
   const { country_code, language_code } = language;
@@ -151,28 +152,41 @@ export const LanguageSelector = ({ hideNameOnMobile }) => {
               </svg>
             </button>
           </div>
-          {isOpen && <div
-            className="fixed top-20 left-2 right-2 bottom-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 flex flex-col -space-y-2
-              lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="language-selector"
-          >
-            {featuredLanguages.length ? (
+          <Transition show={isOpen}>
+            <Transition.Child
+              enter="transition-all duration-200"
+              enterFrom="bg-opacity-0"
+              enterTo="bg-opacity-40"
+              leave="transition-all duration-200"
+              leaveFrom="bg-opacity-40"
+              leaveTo="bg-opacity-0"
+              className="fixed top-0 left-0 right-0 bottom-0  bg-black z-30"
+            />
+            <Transition.Child
+              enter="transition-all duration-200"
+              enterFrom="-bottom-[200px] top-[100vh]"
+              enterTo="bottom-0 top-1/4"
+              leave="transition-all duration-200"
+              leaveFrom="bottom-0 top-1/4"
+              leaveTo="-bottom-[200px] top-[100vh]"
+              className="fixed z-40 left-0 right-0 overflow-auto px-4 rounded-t-lg bg-white"
+            >
+              {featuredLanguages.length ? (
+                <div className="p-2">
+                  <h3 className="m-4">{t('featured_languages')}</h3>
+                  <div className="grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
+                    {featuredLanguages.map(renderLanguageButton)}
+                  </div>
+                </div>
+              ) : null}
               <div className="p-2">
-                <h3 className="m-4">{t('featured_languages')}</h3>
+                <h3 className="m-4">{t('other_languages')}</h3>
                 <div className="grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
-                  {featuredLanguages.map(renderLanguageButton)}
+                  {otherLanguages.map(renderLanguageButton)}
                 </div>
               </div>
-            ) : null}
-            <div className="p-2">
-              <h3 className="m-4">{t('other_languages')}</h3>
-              <div className="grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
-                {otherLanguages.map(renderLanguageButton)}
-              </div>
-            </div>
-          </div>}
+            </Transition.Child>
+          </Transition>
         </div>
       </div>
     </>
