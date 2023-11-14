@@ -49,7 +49,7 @@ export default function Header() {
           <LanguageSelector hideNameOnMobile />
         </div>
       </nav>
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
         <Dialog.Panel className="fixed top-20 left-2 right-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 flex flex-col -space-y-2
               lg:origin-top-right lg:absolute lg:top-auto lg:bottom-auto lg:left-auto lg:right-0 lg:mt-4 lg:-mr-4 overflow-auto lg:max-h-[calc(100vh-196px)] lg:w-screen lg:max-w-[800px]">
           <div className="flow-root px-6 py-2 divide-y">
@@ -60,7 +60,7 @@ export default function Header() {
             <Link
                 href="/videos"
                 onClick={() => setMobileMenuOpen(false)}
-                className="-mx-6 flex items-center gap-3 rounded-lg px-6 py-2 text-base font-semibold leading-7 text-sky-700 hover:bg-gray-50"
+                className="-mx-6 flex items-center gap-3 rounded-lg px-6 py-2 text-base font-semibold leading-7 text-sky-700 hover:bg-gray-50 outline-none"
               >
                 <FilmIcon className="h-6" />
                 {t('videos')}
@@ -68,7 +68,7 @@ export default function Header() {
               <Link
                 href="/hymns"
                 onClick={() => setMobileMenuOpen(false)}
-                className="-mx-6 flex items-center gap-3 rounded-lg px-6 py-2 text-base font-semibold leading-7 text-sky-700 hover:bg-gray-50 hidden"
+                className="-mx-6 flex items-center gap-3 rounded-lg px-6 py-2 text-base font-semibold leading-7 text-sky-700 hover:bg-gray-50 outline-none hidden"
               >
                 <MusicalNoteIcon className="h-6" />
                 {t('hymns')}
