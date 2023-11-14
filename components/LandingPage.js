@@ -16,8 +16,8 @@ import {
   HomeIcon,
   ArrowTopRightOnSquareIcon,
   XMarkIcon,
-  ClipboardIcon,
   ClipboardDocumentIcon,
+  LinkIcon
 } from '@heroicons/react/24/outline';
 
 import HeroVideo from '@/components/HeroVideo';
@@ -247,52 +247,16 @@ export default function LandingPage() {
             </Transition>
           </div>
         </div>
-        <div className="w-full max-w-screen-xl mx-auto px-8 lg:hidden">
-          <div className="flex justify-between gap-8">
-            <div className="flex items-center flex-col justify-start gap-2 border max-w-[150px] gap-4">
-              <div className="h-auto w-full mx-auto rounded-2xl overflow-hidden p-4 bg-white">
-                <QRCode
-                  size={256}
-                  className="h-auto max-w-full w-full"
-                  value={window.location.protocol + "//" + window.location.host  + window.location.pathname}
-                  viewBox={`0 0 256 256`}
-                />
-              </div>
-              {/* <span className="text-center text-xs font-semibold text-gray-800">
-                {t('share_with_others')}
-              </span> */}
-              <div className="grid grid-cols-3 gap-3">
-                <FacebookShareButton url={window.location.protocol + "//" + window.location.host  + window.location.pathname}>
-                  <FacebookIcon rounded borderRadius={3} size={36} />
-                </FacebookShareButton>
-                <TwitterShareButton url={window.location.protocol + "//" + window.location.host  + window.location.pathname}>
-                  <TwitterIcon rounded borderRadius={3} size={36} />
-                </TwitterShareButton>
-                <WhatsappShareButton url={window.location.protocol + "//" + window.location.host  + window.location.pathname}>
-                  <WhatsappIcon rounded borderRadius={3} size={36} />
-                </WhatsappShareButton>
-                <TelegramShareButton url={window.location.protocol + "//" + window.location.host  + window.location.pathname}>
-                  <TelegramIcon rounded borderRadius={3} size={36} />
-                </TelegramShareButton>
-                <EmailShareButton url={window.location.protocol + "//" + window.location.host  + window.location.pathname}>
-                  <EmailIcon rounded borderRadius={3} size={36} />
-                </EmailShareButton>
-                <button
-                  className="rounded-sm bg-slate-500 flex items-center justify-center"
-                  onClick={() => navigator?.clipboard?.writeText(window.location.protocol + "//" + window.location.host  + window.location.pathname)}>
-                  <ClipboardDocumentIcon className="h-5 text-white" />
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-1 flex-col justify-start gap-4 pt-4 flex-shrink-0">
-              <LanguageSelector />
-              <Link
-                href="/videos"
-                className="whitespace-nowrap text-white bg-gradient-to-r from-slate-500 to-slate-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-slate-600 dark:focus:ring-slate-800 font-medium rounded-md text-sm w-auto px-6 py-2 text-center flex flex-col"
-              >
-                <span>{t('more_content')}</span>
-                <span className="text-xs">({t('english_only')})</span>
-              </Link>
+        <div className="flex flex-col items-center w-full max-w-screen-xl mx-auto border px-8 lg:hidden gap-8">
+          <LanguageSelector />
+          <div className="flex items-center flex-col justify-center gap-2 max-w-[150px]">
+            <div className="h-auto w-full mx-auto rounded-2xl overflow-hidden p-4 bg-white">
+              <QRCode
+                size={256}
+                className="h-auto max-w-full w-full"
+                value={window.location.protocol + "//" + window.location.host  + window.location.pathname}
+                viewBox={`0 0 256 256`}
+              />
             </div>
           </div>
         </div>
