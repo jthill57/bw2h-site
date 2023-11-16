@@ -169,7 +169,7 @@ export const LanguageSelector = ({ hideNameOnMobile }) => {
               leave="transition-all duration-200"
               leaveFrom="bottom-0 top-1/4"
               leaveTo="-bottom-[200px] top-[100vh]"
-              className="fixed z-40 left-0 right-0 overflow-auto px-4 rounded-t-lg bg-white"
+              className="fixed z-40 left-0 right-0 overflow-auto rounded-t-lg bg-white"
             >
               {featuredLanguages.length ? (
                 <div className="p-2">

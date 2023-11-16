@@ -28,7 +28,7 @@ export default function HeroVideo({ onWatched, videoId }) {
   }, []);
 
   return (
-    <div className="flex w-full bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900">
+    <div className={`flex w-full bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 ${customVideo ? 'min-h-[30vh]' : ''}`}>
       {hasWindow ? (
         <ReactPlayer
           ref={player}
