@@ -9,7 +9,7 @@ const CONFIG = {
   },
   languages: {
     disable: [],
-    feature: ['en', 'ru-RU', 'uk-UA', 'es-MX'],
+    feature: ['en', 'ru', 'uk', 'es'],
   },
   videos: {
     'en': 'https://stream.mux.com/UFHaz802IQIvq985IVCwLxwOJ2gETDLWMXzxnZsen01cA.m3u8',

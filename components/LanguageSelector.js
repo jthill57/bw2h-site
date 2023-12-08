@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18nConfig from '@/i18nConfig';
 import { useApp } from '@/context/AppContext';
-import { LANGUAGE_NAMES } from '@/lib/constants';
+import { LANGUAGE_NAMES, FLAG_MAPPINGS } from '@/lib/constants';
 import { getLanguages } from '@/lib/helpers';
 import { Transition } from '@headlessui/react';
 
@@ -16,13 +16,9 @@ function FlagIcon({ language = {} }) {
   const { country_code, language_code } = language;
 
   let flag = country_code?.toLowerCase();
+
   if (!flag) {
-    switch (language_code) {
-      case 'en': flag = 'us'; break;
-      case 'eo': flag = 'un'; break;
-      case 'ht': flag = 'ht'; break;
-      default: flag = 'xx'; break;
-    }
+    flag = FLAG_MAPPINGS[language_code] || 'xx';
   }
 
   return (

@@ -5,7 +5,7 @@ const CONFIG = {
   enableContactFormWhitelist: true,
   whitelistedContactLanguages: [
     'en',
-    'es-MX',
+    'es',
   ],
   logo: {
     url: '/images/shbc_logo.png',
@@ -14,7 +14,7 @@ const CONFIG = {
   },
   languages: {
     disable: [],
-    feature: ['en', 'es-MX', 'pt-BR'],
+    feature: ['en', 'es', 'pt'],
   },
   videos: {
     'en': 'https://www.kjv1611only.com/video/01salvation/Pastor_Berzins.mp4',
