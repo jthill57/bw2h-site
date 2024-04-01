@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18nConfig from '@/i18nConfig';
 import { useApp } from '@/context/AppContext';
-import { LANGUAGE_NAMES, FLAG_MAPPINGS } from '@/lib/constants';
+import { LANGUAGE_NAMES, FLAG_MAPPINGS, UNSUPPORTED_LANGUAGES } from '@/lib/constants';
 import { getLanguages } from '@/lib/helpers';
 import { Transition } from '@headlessui/react';
 
@@ -42,7 +42,7 @@ export const LanguageSelector = ({ hideNameOnMobile }) => {
   useEffect(() => {
     const init = async () => {
       const availableLanguages = await getLanguages(app.API_KEY);
-      setLanguages(availableLanguages);
+      setLanguages([...availableLanguages, ...UNSUPPORTED_LANGUAGES]);
     };
 
     init();
@@ -91,6 +91,8 @@ export const LanguageSelector = ({ hideNameOnMobile }) => {
 
   const featuredLanguages = app.languages.feature.map((lang) => languages.find((l) => l.full_code === lang));
   const otherLanguages = languages.filter((lang) => !app.languages.feature.includes(lang.full_code));
+  const supportedLanguages = otherLanguages.filter((lang) => UNSUPPORTED_LANGUAGES.find((l) => l.full_code !== lang.full_code));
+  const unsupportedLanguages = otherLanguages.filter((lang) => UNSUPPORTED_LANGUAGES.find((l) => l.full_code === lang.full_code));
 
   const fixName = (name) => {
     return name.replace(/\s*\(.*?\)\s*/g, '');
@@ -176,11 +178,20 @@ export const LanguageSelector = ({ hideNameOnMobile }) => {
                 </div>
               ) : null}
               <div className="p-2">
-                <h3 className="m-4">{t('other_languages')}</h3>
+                <h3 className="m-4">{t('supported_languages')}</h3>
                 <div className="grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
-                  {otherLanguages.map(renderLanguageButton)}
+                  {supportedLanguages.map(renderLanguageButton)}
                 </div>
               </div>
+              {unsupportedLanguages.length ? (
+                <div className="p-2">
+                  <h3 className="m-4">{t('unsupported_languages')}</h3>
+                  <h4 className="mx-4 mb-4 -my-4 text-xs text-gray-600">{t('unsupported_languages_subtext')}</h4>
+                  <div className="grid grid-cols-2 gap-2 lg:grid-cols-3" role="none">
+                    {unsupportedLanguages.map(renderLanguageButton)}
+                  </div>
+                </div>
+              ) : null}
             </Transition.Child>
           </Transition>
         </div>
