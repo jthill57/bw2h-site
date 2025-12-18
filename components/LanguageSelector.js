@@ -158,7 +158,7 @@ export const LanguageSelector = ({ hideNameOnMobile }) => {
               leave="transition-all duration-200"
               leaveFrom="bg-opacity-40"
               leaveTo="bg-opacity-0"
-              className="fixed top-0 left-0 right-0 bottom-0  bg-black z-30"
+              className="fixed top-0 left-0 right-0 bottom-0 bg-black z-30"
             />
             <Transition.Child
               enter="transition-all duration-200"
